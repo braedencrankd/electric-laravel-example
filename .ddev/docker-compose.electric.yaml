@@ -1,0 +1,30 @@
+version: "3.6"
+name: "electric_quickstart"
+
+services:
+  electric:
+    container_name: ddev-${DDEV_SITENAME}-electric
+    image: electricsql/electric:canary
+    environment:
+      DATABASE_URL: postgresql://db:db@db:5432/db?sslmode=disable
+      LOG_LEVEL: debug
+      ELECTRIC_ENABLE_INTEGRATION_TESTING: "true"
+    ports:
+      - "3002:3000"
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+      com.ddev.app-type: "electric"
+      virtual.host: "${DDEV_SITENAME}.${DDEV_TLD}"
+      com.ddev.platform: "ddev"
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+networks:
+  default:
+    name: ddev_default
+    external: true

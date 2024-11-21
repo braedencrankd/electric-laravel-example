@@ -1,0 +1,46 @@
+#! /usr/bin/env bash
+
+CMD=$1
+FLAGS=$2
+
+
+CMD=${CMD:=start}
+
+# By default FLAGS is empty
+FLAGS=${FLAGS:=}
+
+startServer() {
+  tmux kill-session -t reverb-sess 2>/dev/null
+  tmux new -s reverb-sess -d
+  tmux send "php artisan reverb:start --port=8080 --host='0.0.0.0' --hostname=${DDEV_HOSTNAME} ${FLAGS}" C-m
+}
+
+restartServer() {
+  tmux send "php artisan reverb:restart" C-m
+}
+
+# Start
+if [ $CMD = start ]; then
+  # -----------------------------------------
+  # Start the reverb server
+  # -----------------------------------------
+  echo "Starting reverb server..."
+  startServer
+  echo "Reverb server started on port 8080..."
+
+  # Stop
+  elif [ $CMD = stop ]; then
+    echo "Stopping reverb server..."
+    tmux kill-session -t reverb-sess
+
+  # Restart
+  elif [ $CMD = restart ]; then
+    echo "Restarting reverb server..."
+    restartServer
+    echo "Reverb server restarted on port 8080..."
+
+  else 
+    echo "$0 start|stop|restart"
+    echo "To pass extra flags to reverb:start command, use the following syntax:"
+    echo "$0 start --flag1 --flag2"
+fi

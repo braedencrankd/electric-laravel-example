@@ -1,0 +1,199 @@
+#ddev-generated
+
+http:
+  routers:
+    
+    
+    electric-notes-web-80-http:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-80-http"
+      tls: false
+      entrypoints:
+        - http-80
+    
+    
+    electric-notes-web-8025-http:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-8025-http"
+      tls: false
+      entrypoints:
+        - http-8025
+    
+    
+    electric-notes-web-5173-http:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-5173-http"
+      tls: false
+      entrypoints:
+        - http-5273
+    
+    
+    electric-notes-web-8080-http:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-8080-http"
+      tls: false
+      entrypoints:
+        - http-8080
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    electric-notes-web-80-https:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-80-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-443
+    
+    
+    electric-notes-web-8025-https:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-8025-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-8026
+    
+    
+    electric-notes-web-5173-https:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-5173-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-5173
+    
+    
+    electric-notes-web-8080-https:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-8080-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-8080
+    
+    
+    electric-notes-web-3000-https:
+      
+      rule: HostRegexp(`electric-notes.ddev.site`)
+      
+      middlewares:
+        - autodetect
+      service: "electric-notes-web-3000-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-3001
+    
+    
+
+  # autodetect won't be needed in Traefik 3 https://github.com/traefik/traefik/pull/9546
+  middlewares:
+    autodetect:
+      contentType:
+        autoDetect: false
+
+  services:
+    
+    electric-notes-web-80-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:80
+    
+    electric-notes-web-8025-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:8025
+    
+    electric-notes-web-5173-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:5173
+    
+    electric-notes-web-8080-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:8080
+    
+    electric-notes-web-80-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:80
+    
+    electric-notes-web-8025-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:8025
+    
+    electric-notes-web-5173-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:5173
+    
+    electric-notes-web-8080-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:8080
+    
+    electric-notes-web-3000-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-electric-notes-web:3000
+    
+
+
+tls:
+  certificates:
+    - certFile: /mnt/ddev-global-cache/traefik/certs/electric-notes.crt
+      keyFile: /mnt/ddev-global-cache/traefik/certs/electric-notes.key
+
