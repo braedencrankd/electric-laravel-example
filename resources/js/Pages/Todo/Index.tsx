@@ -13,27 +13,26 @@ interface Todo {
 }
 
 export default function TodoIndex({ auth, laravelVersion }: PageProps) {
-    const { data: todos } = useShape({
+    const { data: todos = [] } = useShape({
         url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
         table: `todos`,
-    });
+    }) as { data: Todo[] };
 
     const [isLoading, setIsLoading] = useState(false);
 
     const toggleCompleted = (id: number) => {
-        console.log('Toggle completed for id:', id);
+        router.put(`/todos/${id}`, {
+            completed: !todos.find((todo) => todo.id === id)?.completed,
+        });
     };
 
     const deleteTodo = (id: number) => {
         if (confirm('Delete Todo?')) {
-            console.log('Delete todo with id:', id);
+            router.delete(`/todos/${id}`);
         }
     };
 
     const addTodo = async (text: string) => {
-        console.log('Add new todo:', text);
-
-        // TODO: Implement addTodo
         router.post('/todos', { text });
     };
 

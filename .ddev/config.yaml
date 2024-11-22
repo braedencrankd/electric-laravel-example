@@ -12,7 +12,6 @@ database:
 hooks:
   post-start:
     - exec: .ddev/commands/web/vite-serve
-    - exec: .ddev/commands/web/reverb-serve
 use_dns_when_possible: true
 composer_version: '2'
 web_environment:
