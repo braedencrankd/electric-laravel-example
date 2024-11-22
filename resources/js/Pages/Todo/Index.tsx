@@ -6,19 +6,17 @@ import { useShape } from '@electric-sql/react';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
-interface Todo {
+type Todo = {
     id: number;
     text: string;
     completed: boolean;
 }
 
 export default function TodoIndex({ auth, laravelVersion }: PageProps) {
-    const { data: todos = [] } = useShape({
+    const { data, isLoading } = useShape<Todo>({
         url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
         table: `todos`,
-    }) as { data: Todo[] };
-
-    const [isLoading, setIsLoading] = useState(false);
+    })
 
     const toggleCompleted = (id: number) => {
         router.put(`/todos/${id}`, {
