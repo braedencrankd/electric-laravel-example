@@ -3,6 +3,7 @@ import TodoForm from '@/Components/TodoForm';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
 import { useShape } from '@electric-sql/react';
+import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
 interface Todo {
@@ -11,7 +12,7 @@ interface Todo {
     completed: boolean;
 }
 
-export default function Welcome({ auth }: PageProps) {
+export default function TodoIndex({ auth, laravelVersion }: PageProps) {
     const { data: todos } = useShape({
         url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
         table: `todos`,
@@ -31,10 +32,13 @@ export default function Welcome({ auth }: PageProps) {
 
     const addTodo = async (text: string) => {
         console.log('Add new todo:', text);
+
+        // TODO: Implement addTodo
+        router.post('/todos', { text });
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout laravelVersion={laravelVersion as string}>
             <div>
                 {/* Loading Indicator */}
                 <div

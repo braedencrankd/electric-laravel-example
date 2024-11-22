@@ -1,4 +1,6 @@
-# Laravel DDEV Example
+# Laravel ElectricSQL Example
+
+This project is an example of how to use ElectricSQL with Laravel. It is a simple todo list application that allows you to add, edit, and delete todos with a React frontend connected to a Laravel backend with InertiaJS.
 
 This project uses DDEV for local development environment setup.
 

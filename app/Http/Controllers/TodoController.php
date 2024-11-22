@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Todo;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 
 class TodoController extends Controller
 {
@@ -12,15 +15,12 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Inertia::render('Todo/Index', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
     }
 
     /**
@@ -28,23 +28,11 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        Todo::create([
+            'text' => $request->text,
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Todo $todo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Todo $todo)
-    {
-        //
+        return to_route('todos.index');
     }
 
     /**
@@ -52,7 +40,11 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        $todo->update([
+            'completed' => $request->completed,
+        ]);
+
+        return to_route('todos.index');
     }
 
     /**
@@ -60,6 +52,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+
+        return to_route('todos.index');
     }
 }

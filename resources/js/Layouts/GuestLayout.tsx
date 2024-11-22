@@ -2,7 +2,10 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 
-export default function Guest({ children }: PropsWithChildren) {
+export default function Guest({
+    children,
+    laravelVersion,
+}: PropsWithChildren<{ laravelVersion: string }>) {
     return (
         <div className="min-h-screen">
             <header className="px-4 sm:px-6 lg:px-8">
@@ -12,7 +15,7 @@ export default function Guest({ children }: PropsWithChildren) {
                             <ApplicationLogo className="w-9" />
                         </Link>
                         <p className="px-2 font-medium leading-6 rounded-full bg-brand/5 text-brand">
-                            Laravel v{import.meta.env.VITE_APP_VERSION}
+                            Laravel v{laravelVersion}
                         </p>
                     </div>
                     <div className="flex gap-4 items-center font-semibold leading-6 text-zinc-900">
