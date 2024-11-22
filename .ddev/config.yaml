@@ -1,20 +1,20 @@
 name: electric-laravel-example
 type: laravel
 docroot: public
-php_version: "8.2"
+php_version: '8.2'
 webserver_type: nginx-fpm
 xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []
 database:
   type: postgres
-  version: "14"
+  version: '14'
 hooks:
   post-start:
     - exec: .ddev/commands/web/vite-serve
     - exec: .ddev/commands/web/reverb-serve
 use_dns_when_possible: true
-composer_version: "2"
+composer_version: '2'
 web_environment:
   - VITE_APP_URL=${DDEV_HOSTNAME}
 web_extra_exposed_ports:

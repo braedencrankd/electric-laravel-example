@@ -2,40 +2,35 @@ import InputCheckbox from '@/Components/InputCheckbox';
 import TodoForm from '@/Components/TodoForm';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
+import { useShape } from '@electric-sql/react';
 import { useState } from 'react';
 
 interface Todo {
     id: number;
-    description: string;
+    text: string;
     completed: boolean;
 }
 
 export default function Welcome({ auth }: PageProps) {
-    const [todos, setTodos] = useState<Todo[]>([
-        { id: 1, description: 'Sample todo 1', completed: false },
-        { id: 2, description: 'Sample todo 2', completed: true },
-    ]);
+    const { data: todos } = useShape({
+        url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
+        table: `todos`,
+    });
+
     const [isLoading, setIsLoading] = useState(false);
 
     const toggleCompleted = (id: number) => {
-        setTodos(
-            todos.map((todo) =>
-                todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-            ),
-        );
+        console.log('Toggle completed for id:', id);
     };
 
     const deleteTodo = (id: number) => {
         if (confirm('Delete Todo?')) {
-            setTodos(todos.filter((todo) => todo.id !== id));
+            console.log('Delete todo with id:', id);
         }
     };
 
     const addTodo = async (text: string) => {
-        setTodos([
-            ...todos,
-            { id: todos.length + 1, description: text, completed: false },
-        ]);
+        console.log('Add new todo:', text);
     };
 
     return (
@@ -80,7 +75,7 @@ export default function Welcome({ auth }: PageProps) {
                     <div className="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
                         <div className="flex flex-col mt-11 md:container sm:mx-auto sm:w-full md:mx-auto">
                             <div className="flex relative flex-col text-sm leading-6 border-t border-b divide-y divide-zinc-100 border-zinc-200 text-zinc-700">
-                                {todos.map((todo) => (
+                                {todos?.map((todo) => (
                                     <div
                                         key={todo.id}
                                         className="flex flex-row justify-center items-center space-x-4 bg-transparent group hover:cursor-pointer hover:bg-zinc-50"
@@ -116,7 +111,7 @@ export default function Welcome({ auth }: PageProps) {
                                                         : ''
                                                 }
                                             >
-                                                {todo.description}
+                                                {todo.text}
                                             </span>
                                         </div>
                                         <div>

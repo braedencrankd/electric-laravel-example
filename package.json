@@ -38,6 +38,6 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "@electric-sql/client": "^0.8.0"
+        "@electric-sql/react": "^0.5.4"
     }
 }

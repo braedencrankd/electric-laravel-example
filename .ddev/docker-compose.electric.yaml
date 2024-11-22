@@ -1,5 +1,5 @@
-version: "3.6"
-name: "electric_quickstart"
+version: '3.6'
+name: 'electric_quickstart'
 
 services:
   electric:
@@ -8,19 +8,22 @@ services:
     environment:
       DATABASE_URL: postgresql://db:db@db:5432/db?sslmode=disable
       LOG_LEVEL: debug
-      ELECTRIC_ENABLE_INTEGRATION_TESTING: "true"
-    ports:
-      - "3002:3000"
+      ELECTRIC_ENABLE_INTEGRATION_TESTING: 'true'
+      VIRTUAL_HOST: ${DDEV_HOSTNAME}
+      HTTP_EXPOSE: 3002:3000
+      HTTPS_EXPOSE: 3000:3000
+    expose:
+      - '3000'
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}
       com.ddev.approot: $DDEV_APPROOT
-      com.ddev.app-type: "electric"
-      virtual.host: "${DDEV_SITENAME}.${DDEV_TLD}"
-      com.ddev.platform: "ddev"
+      com.ddev.app-type: 'electric'
+      virtual.host: '${DDEV_SITENAME}.${DDEV_TLD}'
+      com.ddev.platform: 'ddev'
     depends_on:
       - db
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/v1/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/v1/health']
       interval: 10s
       timeout: 5s
       retries: 3
