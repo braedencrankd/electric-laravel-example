@@ -8,7 +8,7 @@ This project uses DDEV for local development environment setup.
 
 DDEV is required to run this project. To install DDEV:
 
-1. First, install Docker Desktop for your operating system
+1. First, install Docker for your operating system (on macOS, I recommend using [OrbStack](https://docs.orbstack.dev/)).
 2. Install DDEV by following the instructions for your OS:
 
 -   **macOS (with Homebrew):**
