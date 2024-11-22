@@ -12,8 +12,8 @@ This project uses DDEV for local development environment setup.
 
 DDEV is required to run this project. To install DDEV:
 
-1. Install a package manager for you OS. [Homebrew](https://brew.sh/) for MacOS or [Chocolatey](https://chocolatey.org/) on windows. For linux you guys know what you are doing 😏
-2. First, install Docker for your operating system (on MacOS you can run `brew install docker`, I recommend using [OrbStack](https://docs.orbstack.dev/) to run your docker containers).
+1. Install a package manager for your OS. [Homebrew](https://brew.sh/) for MacOS or [Chocolatey](https://chocolatey.org/) on windows. For linux you guys know what you are doing 😏
+2. First, install Docker on your operating system (on MacOS you can run `brew install docker`, I recommend using [OrbStack](https://docs.orbstack.dev/) to run your docker containers).
 3. Install DDEV by following the instructions for your OS:
 
 -   **macOS (with Homebrew):**
