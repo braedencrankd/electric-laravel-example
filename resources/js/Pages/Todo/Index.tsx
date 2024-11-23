@@ -4,19 +4,18 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
 import { useShape } from '@electric-sql/react';
 import { router } from '@inertiajs/react';
-import { useState } from 'react';
 
 type Todo = {
     id: number;
     text: string;
     completed: boolean;
-}
+};
 
 export default function TodoIndex({ auth, laravelVersion }: PageProps) {
-    const { data, isLoading } = useShape<Todo>({
+    const { data: todos, isLoading } = useShape<Todo>({
         url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
         table: `todos`,
-    })
+    });
 
     const toggleCompleted = (id: number) => {
         router.put(`/todos/${id}`, {
