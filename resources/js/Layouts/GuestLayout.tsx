@@ -11,7 +11,7 @@ export default function Guest({
             <header className="px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center py-3 text-sm border-b border-zinc-100">
                     <div className="flex gap-4 items-center">
-                        <Link href="https://electric-sql.com/">
+                        <Link href="https://laravel.com/">
                             <ApplicationLogo className="w-9" />
                         </Link>
                         <p className="px-2 font-medium leading-6 rounded-full bg-brand/5 text-brand">
