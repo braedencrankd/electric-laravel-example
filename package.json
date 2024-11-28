@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "tsc && vite build && vite build --ssr",
+        "build": "tsc && vite build && vite build --ssr && vite build && vite build --ssr --ssr",
         "dev": "vite",
         "lint": "eslint resources/js --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --fix"
     },
@@ -38,6 +38,8 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@electric-sql/pglite": "^0.2.14",
+        "@electric-sql/pglite-sync": "^0.2.16",
         "@electric-sql/react": "^0.5.4"
     }
 }

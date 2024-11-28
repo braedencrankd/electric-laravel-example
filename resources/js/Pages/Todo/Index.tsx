@@ -2,8 +2,11 @@ import InputCheckbox from '@/Components/InputCheckbox';
 import TodoForm from '@/Components/TodoForm';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
-import { useShape } from '@electric-sql/react';
+import { PGlite } from '@electric-sql/pglite';
+import { electricSync } from '@electric-sql/pglite-sync';
+import { live } from '@electric-sql/pglite/live';
 import { router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 type Todo = {
     id: number;
@@ -12,10 +15,74 @@ type Todo = {
 };
 
 export default function TodoIndex({ auth, laravelVersion }: PageProps) {
-    const { data: todos, isLoading } = useShape<Todo>({
-        url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
-        table: `todos`,
-    });
+    const [pg, setPg] = useState<PGlite | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [todos, setTodos] = useState<Todo[]>([]);
+
+    useEffect(() => {
+        const initPg = async () => {
+            try {
+                const pgInstance = await PGlite.create({
+                    extensions: {
+                        live: live,
+                        electric: electricSync(),
+                    },
+                });
+
+                setPg(pgInstance);
+
+                // Wait for the database to be ready
+                await pgInstance.waitReady;
+
+                // Create table and sync with server
+                await pgInstance.exec(`
+                    CREATE TABLE IF NOT EXISTS todos (
+                      id SERIAL PRIMARY KEY,
+                      text TEXT,
+                      completed BOOLEAN,
+                      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                    );
+                `);
+
+                // Sync with the server database
+                const shape = await pgInstance.electric.syncShapeToTable({
+                    shape: {
+                        url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
+                        table: 'todos',
+                    },
+                    schema: 'public',
+                    table: 'todos',
+                    primaryKey: ['id'],
+                });
+
+                // Set the todos to be the todos inside the local pglite db
+                pgInstance.live.query('SELECT * FROM todos', [], (results) => {
+                    setTodos(results.rows as Todo[]);
+
+                    // set loading to false
+                    setLoading(false);
+                });
+
+                console.log(shape);
+            } catch (err) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('An unknown error occurred');
+                }
+                setLoading(false);
+            }
+        };
+
+        initPg();
+
+        return () => {
+            // Cleanup: close the database connection when component unmounts
+            pg?.close();
+        };
+    }, []);
 
     const toggleCompleted = (id: number) => {
         router.put(`/todos/${id}`, {
@@ -38,12 +105,12 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
             <div>
                 {/* Loading Indicator */}
                 <div
-                    className={`items-top relative flex justify-center ${!isLoading && 'hidden'}`}
+                    className={`items-top relative flex justify-center ${!loading && 'hidden'}`}
                 >
-                    <div className="inline-flex absolute top-10 z-50 justify-center w-1/4 text-center rounded bg-violet-800/75">
+                    <div className="absolute top-10 z-50 inline-flex w-1/4 justify-center rounded bg-violet-800/75 text-center">
                         <div className="inline-flex items-center py-2 text-white">
                             <svg
-                                className="mr-3 -ml-1 w-5 h-5 animate-spin"
+                                className="-ml-1 mr-3 h-5 w-5 animate-spin"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -71,14 +138,14 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
                 <TodoForm onSubmit={addTodo} />
 
                 {/* Todo List */}
-                <div className={`items-top grow ${isLoading && 'opacity-0'}`}>
+                <div className={`items-top grow ${loading && 'opacity-0'}`}>
                     <div className="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-                        <div className="flex flex-col mt-11 md:container sm:mx-auto sm:w-full md:mx-auto">
-                            <div className="flex relative flex-col text-sm leading-6 border-t border-b divide-y divide-zinc-100 border-zinc-200 text-zinc-700">
+                        <div className="mt-11 flex flex-col md:container sm:mx-auto sm:w-full md:mx-auto">
+                            <div className="relative flex flex-col divide-y divide-zinc-100 border-b border-t border-zinc-200 text-sm leading-6 text-zinc-700">
                                 {todos?.map((todo) => (
                                     <div
                                         key={todo.id}
-                                        className="flex flex-row justify-center items-center space-x-4 bg-transparent group hover:cursor-pointer hover:bg-zinc-50"
+                                        className="group flex flex-row items-center justify-center space-x-4 bg-transparent hover:cursor-pointer hover:bg-zinc-50"
                                     >
                                         <div className="relative p-0 pl-3">
                                             <InputCheckbox
@@ -119,7 +186,7 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
                                                 onClick={() =>
                                                     deleteTodo(todo.id)
                                                 }
-                                                className="p-2 bg-transparent rounded text-zinc-400 hover:bg-violet-400 hover:text-white"
+                                                className="rounded bg-transparent p-2 text-zinc-400 hover:bg-violet-400 hover:text-white"
                                             >
                                                 <svg
                                                     width="24"

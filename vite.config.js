@@ -21,5 +21,11 @@ export default defineConfig(({ command, mode }) => {
             }),
             react(),
         ],
+        optimizeDeps: {
+            exclude: ['@electric-sql/pglite'],
+        },
+        worker: {
+            format: 'es',
+        },
     };
 });
