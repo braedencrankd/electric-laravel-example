@@ -2,6 +2,15 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 
+// const shape = await pgInstance.electric.syncShapeToTable({
+//     shape: {
+//         url: import.meta.env.VITE_ELECTRIC_SHAPE_URL,
+//         table: 'todos',
+//     },
+//     table: 'todos',
+//     primaryKey: ['id'],
+// });
+
 export default function Guest({
     children,
     laravelVersion,
@@ -9,16 +18,16 @@ export default function Guest({
     return (
         <div className="min-h-screen">
             <header className="px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center py-3 text-sm border-b border-zinc-100">
-                    <div className="flex gap-4 items-center">
+                <div className="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+                    <div className="flex items-center gap-4">
                         <Link href="https://laravel.com/">
                             <ApplicationLogo className="w-9" />
                         </Link>
-                        <p className="px-2 font-medium leading-6 rounded-full bg-brand/5 text-brand">
+                        <p className="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
                             Laravel v{laravelVersion}
                         </p>
                     </div>
-                    <div className="flex gap-4 items-center font-semibold leading-6 text-zinc-900">
+                    <div className="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
                         <a
                             href="https://electric-sql.com/"
                             className="hover:text-zinc-700"
@@ -33,7 +42,7 @@ export default function Guest({
                         </a>
                         <a
                             href="https://electric-sql.com/docs/intro"
-                            className="px-2 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200/80"
+                            className="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
                         >
                             Get Started <span aria-hidden="true">&rarr;</span>
                         </a>

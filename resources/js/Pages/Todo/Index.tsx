@@ -5,7 +5,6 @@ import { PageProps } from '@/types';
 import { PGlite } from '@electric-sql/pglite';
 import { electricSync } from '@electric-sql/pglite-sync';
 import { live } from '@electric-sql/pglite/live';
-import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
 type Todo = {
@@ -24,6 +23,8 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
         const initPg = async () => {
             try {
                 const pgInstance = await PGlite.create({
+                    dataDir: 'idb://todos',
+                    relaxedDurability: true,
                     extensions: {
                         live: live,
                         electric: electricSync(),
@@ -64,8 +65,6 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
                     // set loading to false
                     setLoading(false);
                 });
-
-                console.log(shape);
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message);
@@ -85,19 +84,27 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
     }, []);
 
     const toggleCompleted = (id: number) => {
-        router.put(`/todos/${id}`, {
-            completed: !todos.find((todo) => todo.id === id)?.completed,
-        });
+        // router.put(`/todos/${id}`, {
+        //     completed: !todos.find((todo) => todo.id === id)?.completed,
+        // });
+        pg?.exec(
+            `UPDATE todos SET completed = ${!todos.find(
+                (todo) => todo.id === id,
+            )?.completed} WHERE id = ${id}`,
+        );
     };
 
     const deleteTodo = (id: number) => {
         if (confirm('Delete Todo?')) {
-            router.delete(`/todos/${id}`);
+            // router.delete(`/todos/${id}`);
+            pg?.exec(`DELETE FROM todos WHERE id = ${id}`);
         }
     };
 
     const addTodo = async (text: string) => {
-        router.post('/todos', { text });
+        pg?.query(
+            `INSERT INTO todos (text, completed) VALUES ('${text}', false)`,
+        );
     };
 
     return (
