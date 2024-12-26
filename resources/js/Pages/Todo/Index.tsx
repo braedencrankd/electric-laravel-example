@@ -97,7 +97,7 @@ export default function TodoIndex({ auth, laravelVersion }: PageProps) {
     const deleteTodo = (id: number) => {
         if (confirm('Delete Todo?')) {
             // router.delete(`/todos/${id}`);
-            pg?.exec(`DELETE FROM todos WHERE id = ${id}`);
+            pg?.query(`DELETE FROM todos WHERE id = ${id}`);
         }
     };
 
